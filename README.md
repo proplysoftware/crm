@@ -51,4 +51,4 @@ Browse: https://devl.dev/components, /blocks, /screens, /motion, /illustrations.
 
 ## Code review
 
-Pull requests get AI code review from [Qodo](https://www.qodo.ai/solutions/open-source/) (free for open source). Its config is in `.pr_agent.toml`.
+Pull requests get AI code review from [PR-Agent](https://github.com/The-PR-Agent/pr-agent) running OpenAI GPT-6.2 Sol (`.github/workflows/pr-agent.yml`, needs the `OPENAI_KEY` repo secret). Review instructions are in `.pr_agent.toml`. Comment `/review`, `/improve`, `/describe` or `/ask "..."` on a PR to rerun it.
