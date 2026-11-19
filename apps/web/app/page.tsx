@@ -78,7 +78,9 @@ async function ContactsTable() {
   )
 }
 
-async function Account() {
+// Verifies the session before anything below it renders or queries data,
+// so contacts are never streamed to a request with an invalid session.
+async function Dashboard() {
   const requestHeaders = await headers()
   const session = await runtime.runPromise(
     Effect.gen(function* () {
@@ -89,21 +91,13 @@ async function Account() {
   if (!session) redirect("/sign-in")
 
   return (
-    <div className="flex items-center justify-between gap-4">
-      <p className="text-muted-foreground text-sm">
-        Signed in as <span className="font-medium text-foreground">{session.user.name}</span> ({session.user.email})
-      </p>
-      <SignOutButton />
-    </div>
-  )
-}
-
-export default function Page() {
-  return (
-    <main className="mx-auto flex min-h-svh max-w-4xl flex-col gap-6 p-6">
-      <Suspense fallback={null}>
-        <Account />
-      </Suspense>
+    <>
+      <div className="flex items-center justify-between gap-4">
+        <p className="text-muted-foreground text-sm">
+          Signed in as <span className="font-medium text-foreground">{session.user.name}</span> ({session.user.email})
+        </p>
+        <SignOutButton />
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Contacts</CardTitle>
@@ -118,6 +112,16 @@ export default function Page() {
       <div>
         <Button variant="outline">Add contact</Button>
       </div>
+    </>
+  )
+}
+
+export default function Page() {
+  return (
+    <main className="mx-auto flex min-h-svh max-w-4xl flex-col gap-6 p-6">
+      <Suspense fallback={<p className="text-muted-foreground text-sm">Loading…</p>}>
+        <Dashboard />
+      </Suspense>
     </main>
   )
 }
