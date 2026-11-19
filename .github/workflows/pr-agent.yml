@@ -28,14 +28,15 @@ jobs:
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          config.model: "gpt-6.2-sol"
+          config.model: "openai/gpt-6.2-sol"
           config.fallback_models: "[]"
-          # GPT-6.2 Sol is newer than PR-Agent 0.50's model table, so set limits and reasoning explicitly.
+          # GPT-6.2 Sol is newer than PR-Agent 0.50 and its bundled LiteLLM, so use the explicit openai/ prefix
+          # and set limits and reasoning by hand.
           # 200k input stays under OpenAI's 272k long-context price tier.
           config.custom_model_max_tokens: "200000"
           config.max_model_tokens: "200000"
           config.reasoning_effort: "medium"
-          config.additional_reasoning_effort_models: '["gpt-6.2-sol"]'
+          config.additional_reasoning_effort_models: '["openai/gpt-6.2-sol"]'
 
           github_action_config.auto_describe: "true"
           github_action_config.auto_review: "true"
