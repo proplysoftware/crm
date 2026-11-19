@@ -37,6 +37,8 @@ jobs:
           config.max_model_tokens: "200000"
           config.reasoning_effort: "medium"
           config.additional_reasoning_effort_models: '["openai/gpt-6.2-sol"]'
+          # With reasoning on, the model only accepts the default temperature, so don't send one.
+          config.no_temperature_models: '["openai/gpt-6.2-sol", "gpt-6.2-sol"]'
 
           github_action_config.auto_describe: "true"
           github_action_config.auto_review: "true"
