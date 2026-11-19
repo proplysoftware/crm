@@ -1,0 +1,35 @@
+# Qodo code review config (free for open source: https://www.qodo.ai/solutions/open-source/)
+# Docs: https://docs.qodo.ai/v1/configuration/configuration-file
+
+[github_app]
+# Re-review on every push to an open PR, updating the same comment.
+handle_push_trigger = true
+push_commands = [
+  "/describe --pr_description.final_update_message=false",
+  "/review",
+]
+
+[ignore]
+glob = [
+  "pnpm-lock.yaml",
+  "**/drizzle/**/snapshot.json",
+  "**/next-env.d.ts",
+  "graft/**",
+  # Vendored coss ui primitives from devl.dev; change them deliberately, not via review nits.
+  "packages/ui/src/components/**",
+]
+
+[pr_reviewer]
+extra_instructions = """\
+Stack: Turborepo + pnpm 12, Next.js 16 (App Router, `proxy.ts` not middleware), Effect v4, Drizzle ORM 1.0 rc, Postgres, Better Auth, coss ui (Base UI).
+- Effect v4: services use `Context.Service`, errors use `Schema.TaggedError`, reusable effects use `Effect.fn`. Flag Effect v3 APIs (`Context.Tag`, `Effect.Service`, `Data.TaggedError` for domain errors) and `runPromise` calls outside the shared `ManagedRuntime` in apps/web/lib/runtime.ts.
+- Drizzle 1.0: relations come from `defineRelations` in packages/db/src/relations.ts. Flag the old `relations()` helper. App code should use the Effect `Database` service; `@workspace/db/client` is only for Better Auth.
+- Schema changes in packages/db/src must ship with a generated migration in packages/db/drizzle.
+- Auth: server pages must verify the session (`Auth.requireSession`); `proxy.ts` is only an optimistic cookie check. Flag secrets or env values committed to the repo.
+- UI: Base UI uses the `render` prop, not `asChild`. Use theme tokens (bg-background, text-muted-foreground, ...) instead of raw colors.
+"""
+
+[pr_code_suggestions]
+extra_instructions = """\
+Follow the conventions in [pr_reviewer].extra_instructions. Prefer Effect combinators and typed errors over try/catch in Effect code.
+"""
