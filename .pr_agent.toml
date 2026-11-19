@@ -1,13 +1,5 @@
-# Qodo code review config (free for open source: https://www.qodo.ai/solutions/open-source/)
-# Docs: https://docs.qodo.ai/v1/configuration/configuration-file
-
-[github_app]
-# Re-review on every push to an open PR, updating the same comment.
-handle_push_trigger = true
-push_commands = [
-  "/describe --pr_description.final_update_message=false",
-  "/review",
-]
+# PR-Agent config (runs via .github/workflows/pr-agent.yml). Model settings live in the workflow.
+# Docs: https://docs.pr-agent.ai/usage-guide/configuration_options/
 
 [ignore]
 glob = [
